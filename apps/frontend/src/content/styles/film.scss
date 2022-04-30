@@ -1,0 +1,40 @@
+.film{
+  margin-left: 30px;
+  margin-right: 30px;
+
+  .film-info{
+    width: inherit;
+
+    .film-image{
+      position: relative;
+      width: 100%;
+      margin: 0;
+
+      .film-title{
+        position: absolute;
+        box-sizing: border-box;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+        background: rgb(0 0 0 / 70%);
+        width: 100%;
+        top: 0;
+        font-size: 23pt;
+        padding: 22px 25px 22px 25px;
+
+        .film-title-year{
+          font-style: normal;
+        }
+      }
+
+      picture{
+        width: inherit;
+        img{
+          width: inherit;
+          border-radius: 5px;
+          max-height: 280px;
+          object-fit: cover;
+        }
+      }
+    }
+  }
+}
