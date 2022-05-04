@@ -1,5 +1,6 @@
 import React from "react";
 import ReactPlayer from "react-player";
+import Notice from "../Notice/Notice";
 
 class Player extends React.Component{
     constructor(props) {
@@ -74,7 +75,7 @@ class Player extends React.Component{
             }
         }
 
-        if(currentSong) {
+        if(currentSong && ReactPlayer.canPlay("https://youtu.be/" + currentSong)) {
             return (
                 <section className="player">
                     <ReactPlayer
@@ -138,6 +139,10 @@ class Player extends React.Component{
                     </section>
                 </section>
             );
+        }
+        else if(currentSong && !ReactPlayer.canPlay("https://youtu.be/" + currentSong))
+        {
+            return <Notice title={'Player Error'} text={"Can't play this song..."}/>
         }
     }
 }

@@ -1,0 +1,19 @@
+.notice{
+  position: fixed;
+  display: grid;
+  background: #ff0000f2;
+  padding: 15px;
+  bottom: 2%;
+  min-width: 150px;
+  width: 15%;
+  border-radius: 5px;
+
+  &-title{
+   font-size: 14px;
+  }
+
+  &-text{
+    font-size: 12px;
+    padding: 0;
+  }
+}
