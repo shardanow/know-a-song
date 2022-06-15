@@ -13,20 +13,21 @@ CREATE TABLE IF NOT EXISTS Films (
     tv_series BOOLEAN NOT NULL DEFAULT FALSE
 );
 
+CREATE TABLE IF NOT EXISTS UserType (
+    id     SERIAL PRIMARY KEY,
+    title  VARCHAR(50)  NOT NULL,
+    rights VARCHAR(255) NOT NULL DEFAULT '{}'
+);
+
 CREATE TABLE IF NOT EXISTS Users (
     id SERIAL PRIMARY KEY,
     username VARCHAR(50) UNIQUE NOT NULL,
-    password VARCHAR(50) UNIQUE NOT NULL,
+    password VARCHAR(50) NOT NULL,
     token VARCHAR(50) UNIQUE NOT NULL,
     last_login TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     user_type_id INT NOT NULL DEFAULT 1,
+    user_is_active INT NOT NULL DEFAULT 0,
     FOREIGN KEY (user_type_id) REFERENCES UserType (id)
-);
-
-CREATE TABLE IF NOT EXISTS UserType (
-    id SERIAL PRIMARY KEY,
-    title VARCHAR(50) NOT NULL,
-    rights VARCHAR(255) NOT NULL DEFAULT '{}'
 );
 
 CREATE TABLE IF NOT EXISTS Songs (
@@ -73,6 +74,8 @@ CREATE TABLE IF NOT EXISTS SongFavorite (
 
 --Inserts
 INSERT INTO UserType VALUES
-    (1, 'User', '{authorized: 1, edit_films: 0, edit_songs: 0, edit_users: 0, edit_settings: 0, add_films: 0, add_songs: 0, add_users: 0}'),
-    (2, 'Admin', '{authorized: 1, edit_films: 1, edit_songs: 1, edit_users: 1, edit_settings: 1, add_films: 1, add_songs: 1, add_users: 1}'),
-    (3, 'Moderator', '{authorized: 1, edit_films: 1, edit_songs: 1, edit_users: 0, edit_settings: 0, add_films: 1, add_songs: 1, add_users: 0}');
+    (1, 'Inactive', '{"authorization": 1, "edit_films": 0, "edit_songs": 0, "edit_users": 0, "edit_settings": 0, "add_films": 0, "add_songs": 0, "add_users": 0}'),
+    (2, 'User', '{"authorization": 1, "edit_films": 0, "edit_songs": 0, "edit_users": 0, "edit_settings": 0, "add_films": 0, "add_songs": 0, "add_users": 0}'),
+    (3, 'Admin', '{"authorization": 1, "edit_films": 1, "edit_songs": 1, "edit_users": 1, "edit_settings": 1, "add_films": 1, "add_songs": 1, "add_users": 1}'),
+    (4, 'Moderator', '{"authorization": 1, "edit_films": 1, "edit_songs": 1, "edit_users": 0, "edit_settings": 0, "add_films": 1, "add_songs": 1, "add_users": 0}'),
+    (5, 'Banned', '{"authorization": 0, "edit_films": 0, "edit_songs": 0, "edit_users": 0, "edit_settings": 0, "add_films": 0, "add_songs": 0, "add_users": 0}');

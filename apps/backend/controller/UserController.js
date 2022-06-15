@@ -1,82 +1,216 @@
 const db = require('../db');
-let CryptoJS = require("crypto-js");
+const generators = require('../helpers/generators');
+const authorization = require('../controller/AuthorizationController');
 require('dotenv').config();
 
 class UserController{
-    randomGenerator(){
-        let rand = function() {
-            return Math.random().toString(36).substring(2); // remove `0.`
-        };
-
-        const token = function() {
-            return rand() + rand(); // to make it longer
-        };
-
-        return token();
-    }
-
     async createUser(request, response){
-        let {username, password} = request.body;
+        let {username, password, token} = request.body;
         // Encrypt Password
-        password = CryptoJS.AES.encrypt(password, process.env.SECRET_KEY_SALT).toString();
-        const token = this.randomGenerator();
-        const newUser = await db.query(
-            'INSERT INTO Users(username, password, token) VALUES ($1, $2, $3) RETURNING *'
-            , [username, password, token]);
+        password = generators.encryptStringData(password);
 
-        console.info(newUser);
-        response.json(newUser);
+        //Get checking of API method caller have requested rights
+        const rights = await authorization.checkUserRights(token, ['authorization', 'add_users', 'edit_users']);
+        //Generate new token
+        const tokenNew = generators.randomTokenKey();
+
+        //Create User if API method caller have according rights
+        if(rights.token !== 0){
+            try {
+                const newUser = await db.query(
+                    'INSERT INTO Users(username, password, token) VALUES ($1, $2, $3) RETURNING *'
+                    , [username, password, tokenNew]);
+
+                return response.json(newUser);
+            }
+            catch (e) {
+                //Send 409 response with error data
+                return response.status(409).json({message: e.detail});
+            }
+        }
+        else{
+            return response.status(403).json({message: rights.message});
+        }
     }
 
     async getUsers(request, response){
-        const getUsers = await db.query(
-            'SELECT Users.username, Users.password, Users.last_login, UserType.title FROM Users JOIN UserType ON Users.user_type_id = UserType.id');
+        let {token} = request.body;
 
-        console.info(getUsers);
-        response.json(getUsers);
+        //Get checking of API method caller have requested rights
+        const rights = authorization.checkUserRights(token, ['authorization', 'edit_users']);
+
+        //Get Users if API method caller have admin rights
+        if((await rights).token !== 0){
+            try{
+                const getUsers = await db.query(
+                    'SELECT Users.username, Users.last_login, UserType.title FROM Users JOIN UserType ON Users.user_type_id = UserType.id');
+
+                return response.json(getUsers);
+            }
+            catch (e) {
+                //Send 409 response with error data
+                return response.status(409).json({message: e.detail});
+            }
+        }
+        else{
+            return response.status(403).json({message: (await rights).message});
+        }
     }
 
     async getUserByID(request, response){
         const {id} = request.params;
-        const getUser = await db.query(
-            'SELECT Users.username, Users.password, Users.last_login, UserType.title FROM Users JOIN UserType ON Users.user_type_id = UserType.id WHERE Users.id = $1'
-            , [id]);
 
-        console.info(getUser);
-        response.json(getUser);
+        try{
+            const getUser = await db.query(
+                'SELECT Users.username, Users.last_login, UserType.title FROM Users JOIN UserType ON Users.user_type_id = UserType.id WHERE Users.id = $1'
+                , [id]);
+
+            if(getUser.length > 0){
+                response.json(getUser);
+            }
+            else{
+                return response.status(403).json({message: 'No user found with ID = '+id});
+            }
+        }
+        catch (e) {
+            //Send 409 response with error data
+            return response.status(409).json({message: e.detail});
+        }
     }
 
     async getUserByUsername(request, response){
         const {username} = request.params;
-        const getUser = await db.query(
-            'SELECT Users.username, Users.password, Users.last_login, UserType.title FROM Users JOIN UserType ON Users.user_type_id = UserType.id WHERE Users.username = $1'
-            , [username]);
 
-        console.info(getUser);
-        response.json(getUser);
+        try{
+            const getUser = await db.query(
+                'SELECT Users.username, Users.last_login, UserType.title FROM Users JOIN UserType ON Users.user_type_id = UserType.id WHERE Users.username = $1'
+                , [username]);
+
+            if(getUser.length > 0){
+                return response.json(getUser);
+            }
+            else{
+                return response.status(403).json({message: 'No user found with Username = '+username});
+            }
+        }
+        catch (e) {
+            //Send 409 response with error data
+            return response.status(409).json({message: e.detail});
+        }
     }
 
     async updateUser(request, response){
-        const {username, password, user_type_id} = request.body;
-        const token = this.randomGenerator();
+        let {username, password, user_type_id, token} = request.body;
         const {id} = request.params;
-        const updateUser = await db.query(
-            'UPDATE Users set username = $2, password = $3, token = $4, user_type_id = $5 WHERE id = $1 RETURNING *'
-            , [id, username, password, token, user_type_id]);
 
-        console.info(updateUser);
-        response.json(updateUser);
+        // Encrypt Password
+        password = generators.encryptStringData(password);
+        //Generate Token
+        const newToken = generators.randomTokenKey();
+
+        //Get checking of API method caller have requested rights
+        const rights = await authorization.checkUserRights(token, ['authorization', 'edit_users']);
+
+        //Update User if API method caller have requested rights
+        if(rights.token !== 0){
+            try{
+                //Update User with passed id and token (without changing user_type_id)
+                let updateUser = await db.query(
+                    'UPDATE Users set username = $3, password = $4, token = $5 WHERE id = $1 AND token = $2 RETURNING *'
+                    , [id, token, username, password, newToken]);
+
+                //Update any user by passed id if requested user have admin rights (with changing user_type_id)
+                if (rights.role.toLowerCase() === 'admin') {
+                    updateUser = await db.query(
+                        'UPDATE Users set username = $2, password = $3, token = $4, user_type_id = $5 WHERE id = $1 RETURNING *'
+                        , [id, username, password, newToken, user_type_id]);
+                }
+
+                if (updateUser.length > 0) {
+                    return response.json(updateUser);
+                } else {
+                    return response.status(403).json({message: 'User does not exist for passed data'});
+                }
+            }
+            catch (e) {
+                //Send 409 response with error data
+                return response.status(409).json({message: e.detail});
+            }
+        }
+        else{
+            return response.status(403).json({message: (await rights).message});
+        }
+
+    }
+
+    async updateUserType(request, response){
+        let {user_type_id, token} = request.body;
+        const {id} = request.params;
+
+        //Generate Token
+        const newToken = generators.randomTokenKey();
+
+        //Get checking of API method caller have requested rights
+        const rights = await authorization.checkUserRights(token, ['authorization', 'add_users', 'edit_users']);
+
+        //Update Users Type if API method caller have admin rights
+        if(rights.token !== 0 && rights.role.toLowerCase() === 'admin'){
+            try{
+                const updateUser = await db.query(
+                    'UPDATE Users set user_type_id = $2, token = $3 WHERE id = $1 RETURNING *'
+                    , [id, user_type_id, newToken]);
+
+                response.json(updateUser);
+            }
+            catch (e) {
+                //Send 409 response with error data
+                return response.status(409).json({message: e.detail});
+            }
+        }
+        else{
+            return response.status(403).json({message: rights.message});
+        }
+
     }
 
     async deleteUser(request, response){
+        let {token} = request.body;
         const {id} = request.params;
-        const deleteUser = await db.query(
-            'DELETE FROM Users WHERE id = $1 RETURNING *'
-            , [id]);
 
-        console.info(deleteUser);
-        response.json(deleteUser);
+        //Get checking of API method caller have requested rights
+        const rights = await authorization.checkUserRights(token, ['authorization', 'edit_users']);
+
+        //Get Users if API method caller have requested rights
+        if(rights.token !== 0) {
+            try {
+                //Delete User with passed id and token
+                let deleteUser = await db.query(
+                    'DELETE FROM Users WHERE id = $1 AND token = $2 RETURNING *'
+                    , [id, token]);
+
+                //Delete any user by passed id if requested user have admin rights
+                if(rights.role.toLowerCase() === 'admin')
+                {
+                    deleteUser = await db.query(
+                        'DELETE FROM Users WHERE id = $1 RETURNING *'
+                        , [id]);
+                }
+
+                if (deleteUser.length > 0) {
+                    response.json(deleteUser);
+                } else {
+                    return response.status(403).json({message: 'User does not exist for passed data'});
+                }
+            } catch (e) {
+                //Send 409 response with error data
+                return response.status(409).json({message: e.detail});
+            }
+        }
+        else{
+            return response.status(403).json({message: rights.message});
+        }
     }
+
 }
 
 module.exports = new UserController();
