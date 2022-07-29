@@ -1,10 +1,10 @@
 const pgp = require("pg-promise")(/*options*/);
 const connection = {
     host: 'localhost',
-    port: 5432,
+    port: 5433,
     database: 'knowasong',
     user: 'postgres',
-    password: 'root',
+    password: 'cqh8bjn3',
     max: 30 // use up to 30 connections
 
     // "types" - in case you want to set custom type parsers on the pool level
