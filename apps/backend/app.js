@@ -11,7 +11,7 @@ const userRoleRouter = require('./routes/UserRoleRoutes');
 // Import Routes For Authorization
 const userAuthorizationRouter = require('./routes/AuthorizationRoutes');
 // Define PORT
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 3000;
 // Init Express
 const app = express();
 
