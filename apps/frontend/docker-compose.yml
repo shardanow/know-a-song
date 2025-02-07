@@ -1,0 +1,13 @@
+services:
+  frontend:
+    build: .
+    ports:
+      - "8080:8080"
+    container_name: know-a-song-fontend
+    volumes:
+      - .:/app:delegated # Use delegated for better performance
+      - node_modules_volume:/app/node_modules # Bind `node_modules` to named volume
+    environment:
+      - NODE_ENV=development
+volumes:
+  node_modules_volume:

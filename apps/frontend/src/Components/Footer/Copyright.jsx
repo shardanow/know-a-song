@@ -1,14 +1,15 @@
 import React from "react";
 
-class Copyright extends React.Component{
+const Copyright = () => {
+    const getYear = () => {
+        return new Date().getFullYear();
+    };
 
-    render() {
-        return (
-            <span className="copyright">
-              	&copy; 2022
-            </span>
-        );
-    }
-}
+    return (
+        <span className="copyright">
+            &copy; Know A Song 2022 - {getYear()}
+        </span>
+    );
+};
 
 export default Copyright;

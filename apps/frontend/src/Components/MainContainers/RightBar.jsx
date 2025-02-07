@@ -1,14 +1,11 @@
 import React from "react";
 
-class RightBar extends React.Component{
-
-    render() {
-        return (
-            <aside className="right-bar">
-
-            </aside>
-        );
-    }
-}
+const RightBar = () => {
+    return (
+        <aside className="right-bar">
+            {/* Add your content here */}
+        </aside>
+    );
+};
 
 export default RightBar;

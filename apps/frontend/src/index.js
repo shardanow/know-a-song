@@ -1,7 +1,8 @@
 import React from 'react';
 import './content/styles/main.scss'
 import Home from "./Pages/Home";
-//import reportWebVitals from './reportWebVitals';
+//film page
+import Film from "./Pages/Film";
 
 
 import { createRoot } from 'react-dom/client';
@@ -10,11 +11,7 @@ const root = createRoot(container);
 
 root.render(
     //<React.StrictMode>
-        <Home tab="home" />
+        // <Home tab="home" />
+        <Film tab="film" />
    // </React.StrictMode>
 );
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-//reportWebVitals();
