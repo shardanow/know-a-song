@@ -1,7 +1,10 @@
 .film-item {
+    position: relative;
     cursor: pointer;
     transition: transform 0.2s;
     text-align: center;
+    overflow: hidden;
+    border-radius: 8px;
 }
 
 .film-item:hover {
@@ -14,7 +17,37 @@
 }
 
 .film-item figcaption {
-    margin-top: 8px;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    padding: 8px;
     font-size: 1.2em;
-    color: #333;
+    color: white;
+    background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    backdrop-filter: blur(5px); /* Blurred background */
+    text-align: center;
+    box-sizing: border-box;
+}
+
+.song-count {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    padding: 4px 8px;
+    background: rgba(0, 0, 0, 0.7); /* Semi-transparent background */
+    color: white;
+    font-size: 0.9em;
+    border-radius: 4px;
+}
+
+.film-item.small {
+    max-height: 220px; /* Adjust height as needed */
+}
+
+.film-item.smaller {
+    max-height: 240px; /* Adjust height as needed */
+}
+
+.film-item.normal {
+    max-height: 300px; /* Adjust height as needed */
 }

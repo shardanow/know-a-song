@@ -1,12 +1,12 @@
 .player{
   position: sticky;
-  background-color: #4C6A78;
+  background-color: #2a2a2a;
   max-height: 120px;
   width: 100%;
   bottom: 0;
   padding: 25px;
   box-sizing: border-box;
-  border-top: 2px solid #22404A;
+  border-top: 2px solid white;
 
   .player-integration{
       display: none;
@@ -90,6 +90,7 @@
 
           svg{
             height: 20px;
+            fill: #ff6b6b; /* Updated color for volume control */
           }
         }
       }
@@ -134,18 +135,18 @@
     -webkit-appearance: none;
     height: 10px;
     cursor: default;
-    background: #22404A;
-    box-shadow: -1000px 0 0 1000px #22404A;
+    background: #ff6b6b; /* Updated color for progress bar thumb */
+    box-shadow: -1000px 0 0 1000px #ff6b6b; /* Updated color for progress bar fill */
   }
 
   input[type="range"]::-moz-range-progress {
-    background-color: #22404A;
+    background-color: #ff6b6b; /* Updated color for progress bar fill */
   }
   input[type="range"]::-moz-range-track {
-    background-color: #22404A;
+    background-color: #ff6b6b; /* Updated color for progress bar track */
   }
   input[type="range"]::-ms-fill-lower {
-    background-color: #22404A;
+    background-color: #ff6b6b; /* Updated color for progress bar fill */
   }
   input[type="range"]::-ms-fill-upper {
     background-color: white;

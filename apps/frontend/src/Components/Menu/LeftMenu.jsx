@@ -8,8 +8,16 @@ const LeftMenu = () => {
             <Logo />
             <nav>
                 <ul>
-                    <li><Link to="/">Home</Link></li>
-                    <li><Link to="/films">Films</Link></li>
+                    <li>
+                        <Link to="/">
+                            <i className="fas fa-home menu-icon"></i> Home
+                        </Link>
+                    </li>
+                    <li>
+                        <Link to="/films">
+                            <i className="fas fa-film menu-icon"></i> Films
+                        </Link>
+                    </li>
                 </ul>
             </nav>
         </section>
