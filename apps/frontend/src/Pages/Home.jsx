@@ -1,13 +1,13 @@
 import React from "react";
-import LeftBar from "../Components/MainContainers/LeftBar";
-import RightBar from "../Components/MainContainers/RightBar";
-import ContentContainer from "../Components/MainContainers/ContentContainer";
+import LeftBar from "../Components/Containers/LeftBar";
+import RightBar from "../Components/Containers/RightBar";
+
 
 const Home = () => {
     return (
         <section className="main-container">
             <LeftBar/>
-            <ContentContainer/>
+            
             <RightBar/>
         </section>
     );

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import someDataSongs from "../../Services/API/getFilmSongs";
 import SongItem from "./SongItem";
+import '../../content/styles/songs.scss';
 
 const SongList = ({ playItem, currentSong }) => {
     const [data] = useState(someDataSongs);

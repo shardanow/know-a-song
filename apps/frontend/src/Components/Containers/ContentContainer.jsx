@@ -1,13 +1,12 @@
 import React from "react";
 import Header from "./Header";
 import Footer from "./Footer";
-import Film from "../../Pages/Film";
 
-const ContentContainer = () => {
+const ContentContainer = ({ ContainerComponent }) => {
     return (
         <main className="content-container">
             <Header/>
-            <Film/>
+            {ContainerComponent && <ContainerComponent />}
             <Footer/>
         </main>
     );

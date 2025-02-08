@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import ReactPlayer from "react-player";
 import Notice from "../Notice/Notice";
+import '../../content/styles/player.scss';
 
 const Player = ({ currentSong, currentSongTitle }) => {
     const [play, setPlay] = useState(false);

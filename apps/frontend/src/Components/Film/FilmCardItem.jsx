@@ -1,11 +1,12 @@
 import React from "react";
+import '../../content/styles/filmCardItem.scss';
 
-const FilmCardItem = () => {
+const FilmCardItem = ({ film, onSelectFilm }) => {
     return (
-        <figure className="film-item">
-            <figcaption>Some Film Title</figcaption>
+        <figure className="film-item" onClick={() => onSelectFilm(film.id)}>
+            <figcaption>{film.title}</figcaption>
             <picture>
-                <img src="https://picsum.photos/seed/picsum/200/300" alt=""/>
+                <img src={`https://image.tmdb.org/t/p/w200/${film.poster_path}`} alt={film.title} />
             </picture>
         </figure>
     );

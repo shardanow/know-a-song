@@ -1,4 +1,5 @@
 import React from "react";
+import '../../content/styles/film.scss';
 
 const FilmInfo = ({ filmInfo }) => {
     const { isLoaded, filmTitle, filmYear, filmBackground } = filmInfo;
