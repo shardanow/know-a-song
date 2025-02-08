@@ -1,32 +1,13 @@
-import React, { useState, useEffect } from "react";
-import getFilmSongs from "../../Services/API/getFilmSongs";
+import React from "react";
 import SongItem from "./SongItem";
 import '../../content/styles/songs.scss';
 
-const SongList = ({ playItem, currentSong, filmId, setSongs, isPlaying }) => {
-    const [data, setData] = useState([]);
-    const [error, setError] = useState(null);
-
-    useEffect(() => {
-        const fetchSongs = async () => {
-            try {
-                const songs = await getFilmSongs(filmId);
-                setData(songs);
-                setSongs(songs);
-            } catch (error) {
-                console.error('Error fetching songs:', error);
-                setError('Failed to fetch songs.');
-            }
-        };
-
-        fetchSongs();
-    }, [filmId, setSongs]);
-
-    if (error) {
-        return <div className="error">{error}</div>;
+const SongList = ({ playItem, currentSong, songs, isPlaying }) => {
+    if (!songs.length) {
+        return <div className="error">No songs available.</div>;
     }
 
-    const songsList = data.map(item => (
+    const songsList = songs.map(item => (
         <SongItem
             playItem={playItem}
             currentSong={currentSong}
@@ -44,7 +25,7 @@ const SongList = ({ playItem, currentSong, filmId, setSongs, isPlaying }) => {
                 <h2 className="song-list-title">Playlist</h2>
                 <div className="list-counter">
                     <i className="fas fa-list"></i>
-                    <b className="list-count">{data.length}</b>
+                    <b className="list-count">{songs.length}</b>
                 </div>
             </div>
             {songsList}

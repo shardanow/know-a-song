@@ -72,6 +72,7 @@
   .right-side {
     display: flex;
     align-items: center;
+    grid-gap: 8px;
 
     .left-buttons,
     .right-buttons {

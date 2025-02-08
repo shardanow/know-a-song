@@ -77,6 +77,10 @@ const Player = ({ currentSong, currentSongTitle, songs, currentSongIndex, setCur
         setIsLooping(!isLooping);
     };
 
+    if (songs.length === 0) {
+        return null; // Do not render Player if no songs
+    }
+
     return (
         <section className="player">
             <ReactPlayer

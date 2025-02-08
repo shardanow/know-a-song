@@ -82,7 +82,7 @@ const FilmItem = ({ filmID, type }) => {
     return (
         <section className="film">
             <FilmInfo filmInfo={{ filmTitle, filmYear, filmBackground, isLoaded }} />
-            <SongList playItem={playSelectedSong} currentSong={currentSong} filmId={filmID} setSongs={setSongs} isPlaying={isPlaying} />
+            <SongList playItem={playSelectedSong} currentSong={currentSong} songs={songs} isPlaying={isPlaying} />
             <Player
                 currentSong={currentSong}
                 currentSongTitle={currentSongTitle}
