@@ -9,8 +9,7 @@ const App = () => {
             <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/films" element={<Film />} />
-                // add a new route for the film detail page and pass the id as a parameter
-                <Route path="/film/:id" element={<Film />} />
+                <Route path="/film/:type/:id" element={<Film />} />
             </Routes>
         </Router>
     );

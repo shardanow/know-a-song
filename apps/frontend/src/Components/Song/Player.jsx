@@ -3,26 +3,27 @@ import ReactPlayer from "react-player";
 import Notice from "../Notice/Notice";
 import '../../content/styles/player.scss';
 
-const Player = ({ currentSong, currentSongTitle }) => {
-    const [play, setPlay] = useState(false);
+const Player = ({ currentSong, currentSongTitle, songs, currentSongIndex, setCurrentSongIndex, isPlaying, setIsPlaying }) => {
     const [currentPosition, setCurrentPosition] = useState(0);
     const [seeking, setSeeking] = useState(false);
     const [volume, setVolume] = useState(1);
+    const [prevVolume, setPrevVolume] = useState(1);
+    const [isMuted, setIsMuted] = useState(false);
+    const [isLooping, setIsLooping] = useState(false);
     const playerRef = useRef(null);
 
     const playSong = useCallback(() => {
-        setPlay(true);
-        console.log('Playing song - ' + currentSong);
-    }, [currentSong]);
+        setIsPlaying(true);
+    }, [setIsPlaying]);
 
     useEffect(() => {
-        if (currentSong) {
+        if (currentSong && isPlaying) {
             playSong();
         }
-    }, [currentSong, playSong]);
+    }, [currentSong, isPlaying, playSong]);
 
     const playToggleSong = () => {
-        setPlay(!play);
+        setIsPlaying(prev => !prev);
     };
 
     const progressStatus = (status) => {
@@ -31,86 +32,112 @@ const Player = ({ currentSong, currentSongTitle }) => {
         }
     };
 
-    const setPlayTime = (element) => {
-        playerRef.current.seekTo(parseFloat(element.target.value), 'fraction');
-        setCurrentPosition(parseFloat(element.target.value));
+    const setPlayTime = (e) => {
+        const newTime = parseFloat(e.target.value);
+        playerRef.current.seekTo(newTime, 'fraction');
+        setCurrentPosition(newTime);
     };
 
     const getSongTime = () => {
         if (playerRef.current) {
-            const totalMinutes = Math.floor(playerRef.current.getDuration() / 60);
-            const totalSeconds = ("0" + Math.round(playerRef.current.getDuration() - totalMinutes * 60)).slice(-2);
-            const currentMinutes = Math.floor(playerRef.current.getCurrentTime() / 60);
-            const currentSeconds = ("0" + Math.round(playerRef.current.getCurrentTime() - currentMinutes * 60)).slice(-2);
+            const duration = playerRef.current.getDuration();
+            const currentTime = playerRef.current.getCurrentTime();
 
-            return !isNaN(totalMinutes) ? `${currentMinutes}:${currentSeconds} / ${totalMinutes}:${totalSeconds}` : "0:00 / 0:00";
+            if (!isNaN(duration)) {
+                const totalMinutes = Math.floor(duration / 60);
+                const totalSeconds = String(Math.round(duration % 60)).padStart(2, '0');
+                const currentMinutes = Math.floor(currentTime / 60);
+                const currentSeconds = String(Math.round(currentTime % 60)).padStart(2, '0');
+
+                return `${currentMinutes}:${currentSeconds} / ${totalMinutes}:${totalSeconds}`;
+            }
+        }
+        return "0:00 / 0:00";
+    };
+
+    const handleSongEnd = () => {
+        if (isLooping) {
+            playerRef.current.seekTo(0);
+        } else {
+            setCurrentSongIndex((currentSongIndex + 1) % songs.length);
         }
     };
 
-    if (currentSong && ReactPlayer.canPlay("https://youtu.be/" + currentSong)) {
-        return (
-            <section className="player">
-                <ReactPlayer
-                    ref={playerRef}
-                    className="player-integration"
-                    url={"https://youtu.be/" + currentSong}
-                    playing={play}
-                    volume={volume}
-                    onProgress={progressStatus}
-                    progressInterval={500}
-                />
+    const toggleMute = () => {
+        if (isMuted) {
+            setVolume(prevVolume);
+        } else {
+            setPrevVolume(volume);
+            setVolume(0);
+        }
+        setIsMuted(!isMuted);
+    };
 
-                <section className="player-manipulation">
-                    <section className="player-left-part">
-                        <div id="control" className={play ? "is--playing" : ""} onClick={playToggleSong}>
-                            <div className="border"></div>
-                            <div className="play"></div>
-                        </div>
+    const toggleLoop = () => {
+        setIsLooping(!isLooping);
+    };
 
-                        <picture>
-                            <img src={"https://img.youtube.com/vi/" + currentSong + "/mqdefault.jpg"} alt="player" />
-                        </picture>
-                    </section>
+    return (
+        <section className="player">
+            <ReactPlayer
+                ref={playerRef}
+                className="player-integration"
+                url={`https://www.youtube.com/watch?v=${currentSong}`}
+                playing={isPlaying}
+                volume={volume}
+                muted={isMuted}
+                onProgress={progressStatus}
+                progressInterval={500}
+                onEnded={handleSongEnd}
+            />
 
-                    <section className="player-right-part">
-                        <div className="top-controls">
-                            <span>{currentSongTitle}</span>
-                            <div className="volume-control">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="23.125" height="25" viewBox="0 0 23.125 25">
-                                    <path id="audio" d="M17.536,6a8.379,8.379,0,0,1,0,15.531V23.28a10.022,10.022,0,0,0,0-19.03V6Zm0,4.124a4.8,4.8,0,0,1,0,7.284v1.778a6.26,6.26,0,0,0,0-10.837v1.777ZM3.161,18.774h5l5.625,6.884a1.447,1.447,0,0,0,2.5-.189V2.118a1.467,1.467,0,0,0-2.5-.238L8.161,8.787h-5c-1.6,0-1.875.288-1.875,1.853V16.9c0,1.526.313,1.876,1.875,1.876Z" transform="translate(-1.286 -1.287)" fill="#fff" />
-                                </svg>
+            <section className="player-manipulation">
+                <section className="player-left-part">
+                    <div className="control" onClick={playToggleSong}>
+                        <i className={`fas ${isPlaying ? 'fa-pause' : 'fa-play'} play-icon`}></i>
+                    </div>
 
-                                <input
-                                    className="player-volume-bar"
-                                    type="range"
-                                    max={1}
-                                    step="any"
-                                    value={volume}
-                                    onChange={(e) => setVolume(parseFloat(e.target.value))}
-                                />
-                            </div>
-                        </div>
+                    <picture>
+                        <img src={`https://img.youtube.com/vi/${currentSong}/mqdefault.jpg`} alt="player" />
+                    </picture>
+                </section>
 
-                        <div className="bottom-controls">
+                <section className="player-right-part">
+                    <div className="top-controls">
+                        <span>{currentSongTitle}</span>
+                        <div className="volume-control">
+                            <i className={`fas ${isMuted ? 'fa-volume-mute' : 'fa-volume-up'} volume-icon`} onClick={toggleMute}></i>
                             <input
-                                className="player-seek-bar"
-                                onMouseDown={() => setSeeking(true)}
-                                onMouseUp={() => setSeeking(false)}
-                                onChange={setPlayTime}
+                                className="player-volume-bar"
                                 type="range"
-                                max={0.999999}
+                                max={1}
                                 step="any"
-                                value={currentPosition}
+                                value={volume}
+                                onChange={(e) => setVolume(parseFloat(e.target.value))}
                             />
-                            <span>{getSongTime()}</span>
                         </div>
-                    </section>
+                    </div>
+
+                    <div className="bottom-controls">
+                        <i className="fas fa-step-backward control-icon" onClick={() => setCurrentSongIndex(currentSongIndex > 0 ? currentSongIndex - 1 : songs.length - 1)}></i>
+                        <i className={`fas fa-sync-alt control-icon ${isLooping ? "active" : ""}`} onClick={toggleLoop}></i>
+                        <i className="fas fa-step-forward control-icon" onClick={() => setCurrentSongIndex((currentSongIndex + 1) % songs.length)}></i>
+                        <input
+                            className="player-seek-bar"
+                            onMouseDown={() => setSeeking(true)}
+                            onMouseUp={() => setSeeking(false)}
+                            onChange={setPlayTime}
+                            type="range"
+                            max={0.999999}
+                            step="any"
+                            value={currentPosition}
+                        />
+                        <span>{getSongTime()}</span>
+                    </div>
                 </section>
             </section>
-        );
-    } else if (currentSong && !ReactPlayer.canPlay("https://youtu.be/" + currentSong)) {
-        return <Notice title={'Player Error'} text={"Can't play this song..."} />;
-    }
+        </section>
+    );
 };
 
 export default Player;

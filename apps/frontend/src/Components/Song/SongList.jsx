@@ -1,19 +1,40 @@
-import React, { useState } from "react";
-import someDataSongs from "../../Services/API/getFilmSongs";
+import React, { useState, useEffect } from "react";
+import getFilmSongs from "../../Services/API/getFilmSongs";
 import SongItem from "./SongItem";
 import '../../content/styles/songs.scss';
 
-const SongList = ({ playItem, currentSong }) => {
-    const [data] = useState(someDataSongs);
+const SongList = ({ playItem, currentSong, filmId, setSongs, isPlaying }) => {
+    const [data, setData] = useState([]);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        const fetchSongs = async () => {
+            try {
+                const songs = await getFilmSongs(filmId);
+                setData(songs);
+                setSongs(songs);
+            } catch (error) {
+                console.error('Error fetching songs:', error);
+                setError('Failed to fetch songs.');
+            }
+        };
+
+        fetchSongs();
+    }, [filmId, setSongs]);
+
+    if (error) {
+        return <div className="error">{error}</div>;
+    }
 
     const songsList = data.map(item => (
         <SongItem
             playItem={playItem}
             currentSong={currentSong}
-            id={item.id}
+            id={item.youtube_id}
             key={item.id}
-            songAuthor={item.song_author}
-            songTitle={item.song_title}
+            songAuthor={item.author}
+            songTitle={item.title}
+            isPlaying={isPlaying}
         />
     ));
 
@@ -22,9 +43,7 @@ const SongList = ({ playItem, currentSong }) => {
             <div className="list-top">
                 <h2 className="song-list-title">Playlist</h2>
                 <div className="list-counter">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="27.09" height="20" viewBox="0 0 27.09 20">
-                        <path id="playlist-audio" d="M17.124,5.647V8.523H0V5.647Zm0,5.686v2.876H0V11.333H17.124ZM0,19.895V17.085H11.438v2.809ZM20,5.647h7.09V8.523H22.809V21.366a4.171,4.171,0,0,1-1.237,3.01,4.04,4.04,0,0,1-3.01,1.271,4.338,4.338,0,0,1-4.314-4.314,4.042,4.042,0,0,1,1.271-3.01,4.174,4.174,0,0,1,3.01-1.237A4.277,4.277,0,0,1,20,17.353V5.647Z" transform="translate(0 -5.647)" fill="#fff"/>
-                    </svg>
+                    <i className="fas fa-list"></i>
                     <b className="list-count">{data.length}</b>
                 </div>
             </div>

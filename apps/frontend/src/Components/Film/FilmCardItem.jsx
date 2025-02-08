@@ -1,17 +1,59 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import '../../content/styles/filmCardItem.scss';
+import getFilmInfo from "../../Services/API/getFilmInfo";
 
 const FilmCardItem = ({ film, onSelectFilm, size, songCount }) => {
+    const [filmInfo, setFilmInfo] = useState(null);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        const fetchFilmInfo = async () => {
+            try {
+                const info = await getFilmInfo(film.api_tmdb_id, film.tv_series ? 'tv' : 'movie');
+                setFilmInfo(info);
+            } catch (error) {
+                console.error('Error fetching film info:', error);
+                setError('Failed to fetch film information.');
+            }
+        };
+
+        fetchFilmInfo();
+    }, [film.api_tmdb_id]);
+
+    if (error) {
+        return <div className="error">{error}</div>;
+    }
+
+    if (!filmInfo) {
+        return <div className="loading">Loading...</div>;
+    }
+
     // Get film year
-    const releaseDate = new Date(film.release_date);
+    const releaseDate = new Date(filmInfo.release_date || filmInfo.first_air_date);
     const releaseYear = releaseDate.getFullYear();
 
+    // Determine image size based on card size
+    let imageSize;
+    switch (size) {
+        case 'small':
+            imageSize = 'w200';
+            break;
+        case 'normal':
+            imageSize = 'w300';
+            break;
+        case 'big':
+            imageSize = 'w500';
+            break;
+        default:
+            imageSize = 'w200';
+    }
+
     return (
-        <figure className={`film-item ${size}`} onClick={() => onSelectFilm(film.id)}>
-            <div className="song-count">5 {songCount} songs</div>
-            <figcaption>{film.title} ({releaseYear})</figcaption>
+        <figure className={`film-item ${size}`} onClick={() => onSelectFilm(film.api_tmdb_id, film.tv_series ? 'tv' : 'movie')}>
+            <div className="song-count">{songCount} songs</div>
+            <figcaption>{filmInfo.title || filmInfo.name} ({releaseYear})</figcaption>
             <picture>
-                <img src={`https://image.tmdb.org/t/p/w200/${film.poster_path}`} alt={film.title} />
+                <img src={`https://image.tmdb.org/t/p/${imageSize}/${filmInfo.poster_path}`} alt={filmInfo.title || filmInfo.name} />
             </picture>
         </figure>
     );

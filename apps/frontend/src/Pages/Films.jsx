@@ -5,10 +5,10 @@ import RightBar from "../Components/Containers/RightBar";
 import ContentContainer from "../Components/Containers/ContentContainer";
 import FilmItem from "../Components/Film/FilmItem";
 import FilmList from "../Components/Film/FilmList";
-import getRandomFilms from "../Services/API/getRandomFilms"; // Assume this is a function to fetch random films
+import getFilms from "../Services/API/getFilms";
 
 const Film = () => {
-    const { id } = useParams();
+    const { type, id } = useParams();
     const navigate = useNavigate();
     const [films, setFilms] = useState([]);
     const [error, setError] = useState(null);
@@ -16,7 +16,7 @@ const Film = () => {
     useEffect(() => {
         const fetchRandomFilms = async () => {
             try {
-                const filmsData = await getRandomFilms();
+                const filmsData = await getFilms();
                 setFilms(filmsData);
             } catch (e) {
                 console.error(e);
@@ -29,14 +29,14 @@ const Film = () => {
         }
     }, [id]);
 
-    const handleSelectFilm = (filmID) => {
-        navigate(`/film/${filmID}`);
+    const handleSelectFilm = (filmID, filmType) => {
+        navigate(`/film/${filmType}/${filmID}`);
     };
 
     let ContainerComponent;
     if (id) {
         // Render FilmItem component with the correct props
-        ContainerComponent = () => <FilmItem filmID={id} />;
+        ContainerComponent = () => <FilmItem filmID={id} type={type} />;
     } else {
         // Render FilmList component with the correct props
         ContainerComponent = () => <FilmList onSelectFilm={handleSelectFilm} films={films} />;
