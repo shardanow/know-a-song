@@ -1,6 +1,6 @@
 import React from "react";
 
-const SongItem = ({ id, currentSong, playItem, songAuthor, songTitle, isPlaying }) => {
+const SongItem = ({ id, currentSong, playItem, songAuthor, songTitle, isPlaying, youtubeLink }) => {
     return (
         <div className={`song-item ${id === currentSong ? "song-item--active" : ""}`}>
             <div className="left-side">
@@ -15,7 +15,9 @@ const SongItem = ({ id, currentSong, playItem, songAuthor, songTitle, isPlaying 
                 <div className="left-buttons">
                     <i className="fab fa-apple"></i>
                     <i className="fab fa-spotify"></i>
-                    <i className="fab fa-youtube"></i>
+                    <a href={youtubeLink} target="_blank" rel="noreferrer">
+                        <i className="fab fa-youtube"></i>
+                    </a>
                 </div>
                 <div className="right-buttons">
                     <i className="fas fa-heart"></i>

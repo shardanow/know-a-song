@@ -1,11 +1,10 @@
-import fetchJSONData from "./getDataMethods";
+import fetchTMDBJSONData from "./getTMDBDataMethods";
 
 async function getRandomFilms(type = 'movie', limit = 10) {
-    const apiKey = 'e6aa910d4f96cc9932b818e8cc3b34ba';
-    const url = `https://api.themoviedb.org/3/discover/${type}?api_key=${apiKey}&sort_by=popularity.desc&page=1`;
+    const url = `https://api.themoviedb.org/3/discover/${type}?sort_by=popularity.desc&page=1`;
 
     try {
-        const data = await fetchJSONData(url);
+        const data = await fetchTMDBJSONData(url);
         console.log(data.results); // Log the results for debugging
         return data.results.slice(0, limit);
     } catch (error) {

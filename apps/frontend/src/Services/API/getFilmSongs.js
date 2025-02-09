@@ -1,4 +1,4 @@
-import fetchJSONData from "./getDataMethods";
+import fetchJSONData from "./getBasicDataMethods";
 
 async function getFilmSongs(filmId) {
     const url = `http://localhost:3000/api/songs/${filmId}`;

@@ -1,4 +1,4 @@
-import fetchJSONData from "./getDataMethods";
+import fetchJSONData from "./getBasicDataMethods";
 
 async function getRandomFilms(limit = 10) {
     const url = `http://localhost:3000/api/films`;

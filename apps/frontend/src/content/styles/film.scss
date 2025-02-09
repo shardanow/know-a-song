@@ -15,7 +15,8 @@
         box-sizing: border-box;
         border-top-left-radius: 5px;
         border-top-right-radius: 5px;
-        background: rgb(0 0 0 / 70%);
+        background: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(5px);
         width: 100%;
         top: 0;
         font-size: 23pt;
@@ -28,9 +29,13 @@
 
       picture{
         width: inherit;
+        display: flex;
+        
         img{
           width: inherit;
-          border-radius: 5px;
+          object-position: top;
+          border-top-left-radius: 5px;
+          border-top-right-radius: 5px;
           max-height: 280px;
           object-fit: cover;
         }

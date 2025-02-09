@@ -1,21 +1,62 @@
 .song-list {
+  padding: 20px;
+  background-color: #252525;
+
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
   .list-top {
-    display: grid;
-    grid-auto-flow: column;
+    display: flex;
+    justify-content: space-between;
     align-items: center;
-    grid-template-columns: 1fr auto;
+
+    h2{
+      margin: 0;
+      padding: 0;
+    }
 
     .list-counter {
-      display: grid;
-      grid-auto-flow: column;
+      display: flex;
       align-items: center;
-      font-size: 21px;
+      font-size: 18px;
+      color: white;
 
-      .list-count {
-        font-size: 28px;
-        margin-left: 10px;
+      i {
+        margin-right: 8px;
       }
     }
+  }
+
+  .song-list-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: white;
+  }
+
+  .season-block {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .season-title {
+    font-size: 20px;
+    font-weight: bold;
+    color: white;
+    margin-bottom: 10px;
+  }
+
+  .episode-block {
+    margin-bottom: 15px;
+    padding-left: 20px;
+    border-left: 2px solid #ddd;
+  }
+
+  .episode-title {
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+    margin-bottom: 8px;
   }
 }
 
@@ -23,10 +64,10 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 15px;
+  padding: 10px;
   margin-bottom: 10px;
   border-radius: 8px;
-  background-color: #333;
+  background-color: #252525;
   transition: background-color 0.3s, box-shadow 0.3s;
 
   &:hover {
@@ -35,7 +76,7 @@
   }
 
   &.song-item--active {
-    background-color: #555;
+    background-color: #444;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 
     .left-side .play-icon {
@@ -92,4 +133,11 @@
       }
     }
   }
+}
+
+.error {
+  color: red;
+  font-size: 16px;
+  text-align: center;
+  margin-top: 20px;
 }
