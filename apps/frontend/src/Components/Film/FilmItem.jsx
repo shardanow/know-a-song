@@ -9,6 +9,7 @@ const FilmItem = ({ filmID, type }) => {
     const [filmTitle, setFilmTitle] = useState(null);
     const [filmYear, setFilmYear] = useState(null);
     const [filmBackground, setFilmBackground] = useState(null);
+    const [filmDBLink, setFilmDBLink] = useState(null);
     const [isLoaded, setIsLoaded] = useState(false);
     const [currentSong, setCurrentSong] = useState(null);
     const [currentSongTitle, setCurrentSongTitle] = useState(null);
@@ -38,6 +39,7 @@ const FilmItem = ({ filmID, type }) => {
                     setFilmTitle(filmInfoData.name || filmInfoData.title);
                     setFilmYear(new Date(filmInfoData.first_air_date || filmInfoData.release_date).getFullYear());
                     setFilmBackground('https://image.tmdb.org/t/p/original/' + filmInfoData.backdrop_path);
+                    setFilmDBLink(`https://www.themoviedb.org/${type}/${filmID}`);
                     setIsLoaded(true);
                 }
 
@@ -81,7 +83,7 @@ const FilmItem = ({ filmID, type }) => {
 
     return (
         <section className="film">
-            <FilmInfo filmInfo={{ filmTitle, filmYear, filmBackground, isLoaded }} />
+            <FilmInfo filmInfo={{ filmTitle, filmYear, filmBackground, isLoaded, filmDBLink }} />
             <SongList playItem={playSelectedSong} currentSong={currentSong} songs={songs} isPlaying={isPlaying} />
             <Player
                 currentSong={currentSong}

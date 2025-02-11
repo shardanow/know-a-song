@@ -11,9 +11,16 @@
     justify-content: space-between;
     align-items: center;
 
-    h2{
+    h2 {
       margin: 0;
       padding: 0;
+      display: flex;
+      align-items: center;
+
+      i {
+        margin-right: 8px;
+        font-size: 19px;
+      }
     }
 
     .list-counter {
@@ -44,6 +51,13 @@
     font-weight: bold;
     color: white;
     margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+
+    i {
+      margin-right: 8px;
+      font-size: 14px;
+    }
   }
 
   .episode-block {
@@ -57,6 +71,14 @@
     font-weight: bold;
     color: white;
     margin-bottom: 8px;
+    cursor: pointer;
+    margin-left: -10px;
+    display: flex;
+    align-items: center;
+
+    i {
+      margin-right: 10px;
+    }
   }
 }
 
@@ -106,6 +128,74 @@
 
       .song-author {
         font-weight: bold;
+      }
+
+      .song-label {
+        font-size: 14px;
+        font-weight: bold;
+        margin-left: 10px;
+        padding: 2px 5px;
+        border-radius: 4px;
+        background-color: #007bff;
+        color: #fff;
+
+        &--opening {
+          background-color: #28a745; /* Green for opening */
+        }
+
+        &--ending {
+          background-color: #dc3545; /* Red for ending */
+        }
+      }
+
+      .repetition-icon-wrapper {
+        position: relative;
+        display: inline-block;
+        margin-left: 10px;
+
+        .repetition-icon {
+          color: #ffc107; /* Yellow color for repetition icon */
+          cursor: pointer;
+          transition: color 0.3s;
+
+          &:hover {
+            color: #ffeb3b; /* Lighter yellow on hover */
+          }
+        }
+
+        .repetition-hint {
+          visibility: hidden;
+          width: 200px;
+          background-color: #333;
+          color: #fff;
+          text-align: center;
+          border-radius: 6px;
+          padding: 5px;
+          position: absolute;
+          z-index: 1;
+          bottom: 135%;
+          left: 25%;
+          margin-left: -100px;
+          opacity: 0;
+          transition: opacity 0.3s;
+          white-space: pre-line;
+
+          &::after {
+            content: "";
+            position: absolute;
+            top: 100%; /* Arrow at the bottom */
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #333 transparent transparent transparent;
+          }
+        }
+
+        &:hover .repetition-hint {
+          visibility: visible;
+          opacity: 1;
+        }
       }
     }
   }

@@ -59,6 +59,8 @@
       }
 
       picture {
+        display: flex;
+        
         img {
           height: 60px;
           object-fit: cover;

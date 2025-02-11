@@ -1,6 +1,10 @@
 import React from "react";
 
-const SongItem = ({ id, currentSong, playItem, songAuthor, songTitle, isPlaying, youtubeLink }) => {
+const SongItem = ({ id, currentSong, playItem, songAuthor, songTitle, isPlaying, youtubeLink, isOpening, isEnding, repetitions }) => {
+    const repetitionHint = repetitions
+        ? `Repeats in: \n Seasons: ${[...new Set(repetitions.map(r => r.season))].join(', ')} \n Episodes: ${repetitions.map(r => r.episode).join(', ')}`
+        : '';
+
     return (
         <div className={`song-item ${id === currentSong ? "song-item--active" : ""}`}>
             <div className="left-side">
@@ -8,7 +12,17 @@ const SongItem = ({ id, currentSong, playItem, songAuthor, songTitle, isPlaying,
                     className={`fas ${id === currentSong && isPlaying ? "fa-pause-circle" : "fa-play-circle"} play-icon`}
                     onClick={() => playItem(id, `${songAuthor} - ${songTitle}`)}
                 ></i>
-                <span className="song-title"><b className="song-author">{songAuthor}</b> - {songTitle}</span>
+                <span className="song-title">
+                    <b className="song-author">{songAuthor}</b> - {songTitle}
+                    {isOpening && <span className="song-label song-label--opening">Opening</span>}
+                    {isEnding && <span className="song-label song-label--ending">Ending</span>}
+                    {repetitions && (
+                        <span className="repetition-icon-wrapper">
+                            <i className="fas fa-sync-alt repetition-icon"></i>
+                            <span className="repetition-hint">{repetitionHint}</span>
+                        </span>
+                    )}
+                </span>
             </div>
 
             <div className="right-side">

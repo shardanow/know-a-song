@@ -5,6 +5,8 @@ import '../../content/styles/songs.scss';
 
 const SongList = ({ playItem, currentSong, songs, isPlaying }) => {
     const [episodeNames, setEpisodeNames] = useState({});
+    const [collapsedEpisodes, setCollapsedEpisodes] = useState({});
+    const [repetitiveSongs, setRepetitiveSongs] = useState({});
 
     useEffect(() => {
         const fetchEpisodeNames = async () => {
@@ -25,6 +27,41 @@ const SongList = ({ playItem, currentSong, songs, isPlaying }) => {
         fetchEpisodeNames();
     }, [songs]);
 
+    useEffect(() => {
+        // Initialize collapsedEpisodes state with all episodes collapsed by default
+        const initialCollapsedState = songs.reduce((acc, song) => {
+            const { season, episode } = song;
+            if (!acc[season]) {
+                acc[season] = {};
+            }
+            acc[season][episode] = true;
+            return acc;
+        }, {});
+        setCollapsedEpisodes(initialCollapsedState);
+    }, [songs]);
+
+    useEffect(() => {
+        // Identify repetitive songs
+        const repetitions = songs.reduce((acc, song) => {
+            const { youtube_id, season, episode } = song;
+            if (!acc[youtube_id]) {
+                acc[youtube_id] = [];
+            }
+            acc[youtube_id].push({ season, episode });
+            return acc;
+        }, {});
+
+        // Filter out songs that are not repetitive
+        const repetitiveSongs = Object.keys(repetitions).reduce((acc, youtube_id) => {
+            if (repetitions[youtube_id].length > 1) {
+                acc[youtube_id] = repetitions[youtube_id];
+            }
+            return acc;
+        }, {});
+
+        setRepetitiveSongs(repetitiveSongs);
+    }, [songs]);
+
     if (!songs.length) {
         return <div className="error">No songs available.</div>;
     }
@@ -42,10 +79,22 @@ const SongList = ({ playItem, currentSong, songs, isPlaying }) => {
         return acc;
     }, {});
 
+    const toggleCollapse = (season, episode) => {
+        setCollapsedEpisodes(prevState => ({
+            ...prevState,
+            [season]: {
+                ...prevState[season],
+                [episode]: !prevState[season]?.[episode]
+            }
+        }));
+    };
+
     return (
         <section className="song-list">
             <div className="list-top">
-                <h2 className="song-list-title">Playlist</h2>
+                <h2 className="song-list-title">
+                    <i className="fas fa-music"></i> Playlist
+                </h2>
                 <div className="list-counter">
                     <i className="fas fa-list"></i>
                     <b className="list-count">{songs.length}</b>
@@ -53,24 +102,41 @@ const SongList = ({ playItem, currentSong, songs, isPlaying }) => {
             </div>
             {Object.keys(groupedSongs).map(season => (
                 <div key={season} className="season-block">
-                    <h3 className="season-title">Season {season}</h3>
+                    <h3 className="season-title">
+                    <i class="fa-solid fa-film"></i> Season {season}
+                    </h3>
                     {Object.keys(groupedSongs[season]).map(episode => (
                         <div key={episode} className="episode-block">
-                            <h4 className="episode-title">
-                                {episodeNames[season] && episodeNames[season][episode]}
+                            <h4 className="episode-title" onClick={() => toggleCollapse(season, episode)}>
+                                <i className={`fas ${collapsedEpisodes[season]?.[episode] ? 'fa-chevron-down' : 'fa-chevron-up'}`}></i>
+                                <i class="fa-solid fa-file-video"></i>
+                                Episode {episode} - {episodeNames[season] && episodeNames[season][episode]}
                             </h4>
-                            {groupedSongs[season][episode].map(item => (
-                                <SongItem
-                                    playItem={playItem}
-                                    currentSong={currentSong}
-                                    id={item.youtube_id}
-                                    key={item.id}
-                                    songAuthor={item.author}
-                                    songTitle={item.title}
-                                    isPlaying={isPlaying}
-                                    youtubeLink={item.youtube_link}
-                                />
-                            ))}
+                            {!collapsedEpisodes[season]?.[episode] && (
+                                groupedSongs[season][episode]
+                                    .sort((a, b) => {
+                                        if (a.is_opening) return -1;
+                                        if (b.is_opening) return 1;
+                                        if (a.is_ending) return 1;
+                                        if (b.is_ending) return -1;
+                                        return 0;
+                                    })
+                                    .map(item => (
+                                        <SongItem
+                                            playItem={playItem}
+                                            currentSong={currentSong}
+                                            id={item.youtube_id}
+                                            key={item.id}
+                                            songAuthor={item.author}
+                                            songTitle={item.title}
+                                            isPlaying={isPlaying}
+                                            youtubeLink={item.youtube_link}
+                                            isOpening={item.is_opening}
+                                            isEnding={item.is_ending}
+                                            repetitions={repetitiveSongs[item.youtube_id]}
+                                        />
+                                    ))
+                            )}
                         </div>
                     ))}
                 </div>

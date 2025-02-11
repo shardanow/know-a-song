@@ -18,7 +18,7 @@ const FilmCardItem = ({ film, onSelectFilm, size, songCount }) => {
         };
 
         fetchFilmInfo();
-    }, [film.api_tmdb_id]);
+    }, [film.api_tmdb_id, film.tv_series]);
 
     if (error) {
         return <div className="error">{error}</div>;
