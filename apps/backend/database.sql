@@ -36,10 +36,21 @@ CREATE TABLE IF NOT EXISTS Songs (
     owner_id INT NOT NULL,
     film_id INT NOT NULL,
     season INT DEFAULT 0,
+    episode_season_id INT,
+    is_opening BOOLEAN NOT NULL DEFAULT FALSE,
+    is_ending BOOLEAN NOT NULL DEFAULT FALSE,
     author VARCHAR(50) NOT NULL,
     title VARCHAR(50) NOT NULL,
     FOREIGN KEY (film_id) REFERENCES Films (id),
     FOREIGN KEY (owner_id) REFERENCES Users (id)
+);
+
+CREATE TABLE IF NOT EXISTS EpisodeSeasonSongs (
+    id SERIAL PRIMARY KEY,
+    song_id INT NOT NULL,
+    season INT DEFAULT 0,
+    episode INT DEFAULT 0,
+    FOREIGN KEY (song_id) REFERENCES Songs (id)
 );
 
 CREATE TABLE IF NOT EXISTS SongSources (
