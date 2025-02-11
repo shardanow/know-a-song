@@ -5,26 +5,32 @@ import '../../content/styles/songs.scss';
 
 const SongList = ({ playItem, currentSong, songs, isPlaying }) => {
     const [episodeNames, setEpisodeNames] = useState({});
+    const [episodeThumbnails, setEpisodeThumbnails] = useState({});
     const [collapsedEpisodes, setCollapsedEpisodes] = useState({});
     const [repetitiveSongs, setRepetitiveSongs] = useState({});
+    const [selectedThumbnail, setSelectedThumbnail] = useState(null);
 
     useEffect(() => {
-        const fetchEpisodeNames = async () => {
+        const fetchEpisodeData = async () => {
             const names = {};
+            const thumbnails = {};
             for (const song of songs) {
                 const { season, episode, api_tmdb_id } = song;
                 if (!names[season]) {
                     names[season] = {};
+                    thumbnails[season] = {};
                 }
                 if (!names[season][episode]) {
                     const episodeData = await getTVEpisodeData(api_tmdb_id, season, episode);
                     names[season][episode] = episodeData.name;
+                    thumbnails[season][episode] = episodeData.still_path ? `https://image.tmdb.org/t/p/w780${episodeData.still_path}` : null;
                 }
             }
             setEpisodeNames(names);
+            setEpisodeThumbnails(thumbnails);
         };
 
-        fetchEpisodeNames();
+        fetchEpisodeData();
     }, [songs]);
 
     useEffect(() => {
@@ -89,6 +95,15 @@ const SongList = ({ playItem, currentSong, songs, isPlaying }) => {
         }));
     };
 
+    const handleThumbnailClick = (event, thumbnail) => {
+        event.stopPropagation();
+        setSelectedThumbnail(thumbnail);
+    };
+
+    const closeModal = () => {
+        setSelectedThumbnail(null);
+    };
+
     return (
         <section className="song-list">
             <div className="list-top">
@@ -103,13 +118,20 @@ const SongList = ({ playItem, currentSong, songs, isPlaying }) => {
             {Object.keys(groupedSongs).map(season => (
                 <div key={season} className="season-block">
                     <h3 className="season-title">
-                    <i class="fa-solid fa-film"></i> Season {season}
+                        <i className="fa-solid fa-film"></i> Season {season}
                     </h3>
                     {Object.keys(groupedSongs[season]).map(episode => (
                         <div key={episode} className="episode-block">
                             <h4 className="episode-title" onClick={() => toggleCollapse(season, episode)}>
                                 <i className={`fas ${collapsedEpisodes[season]?.[episode] ? 'fa-chevron-down' : 'fa-chevron-up'}`}></i>
-                                <i class="fa-solid fa-file-video"></i>
+                                {episodeThumbnails[season] && episodeThumbnails[season][episode] && (
+                                    <img
+                                        src={episodeThumbnails[season][episode]}
+                                        alt={`Episode ${episode} thumbnail`}
+                                        className="episode-thumbnail"
+                                        onClick={(event) => handleThumbnailClick(event, episodeThumbnails[season][episode])}
+                                    />
+                                )}
                                 Episode {episode} - {episodeNames[season] && episodeNames[season][episode]}
                             </h4>
                             {!collapsedEpisodes[season]?.[episode] && (
@@ -141,6 +163,14 @@ const SongList = ({ playItem, currentSong, songs, isPlaying }) => {
                     ))}
                 </div>
             ))}
+            {selectedThumbnail && (
+                <div className="modal" onClick={closeModal}>
+                    <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                        <span className="close" onClick={closeModal}>&times;</span>
+                        <img src={selectedThumbnail} alt="Episode thumbnail" className="modal-thumbnail" />
+                    </div>
+                </div>
+            )}
         </section>
     );
 };

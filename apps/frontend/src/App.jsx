@@ -2,6 +2,7 @@ import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Home from "./Pages/Home";
 import Film from "./Pages/Films";
+import './content/styles/layout.scss';
 
 const App = () => {
     return (
