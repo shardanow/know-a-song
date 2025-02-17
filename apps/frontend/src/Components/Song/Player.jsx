@@ -10,6 +10,8 @@ const Player = ({ currentSong, currentSongTitle, songs, currentSongIndex, setCur
     const [prevVolume, setPrevVolume] = useState(1);
     const [isMuted, setIsMuted] = useState(false);
     const [isLooping, setIsLooping] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState(null);
     const playerRef = useRef(null);
 
     const playSong = useCallback(() => {
@@ -77,12 +79,23 @@ const Player = ({ currentSong, currentSongTitle, songs, currentSongIndex, setCur
         setIsLooping(!isLooping);
     };
 
+    useEffect(() => {
+        setIsLoading(false);
+    }, [currentSong]);
+
+    const handleError = (e) => {
+        setError("An error occurred while playing the song.");
+        setIsPlaying(false);
+    };
+
     if (songs.length === 0) {
         return null; // Do not render Player if no songs
     }
 
     return (
         <section className="player">
+            {isLoading && <div className="loading-message">Loading...</div>}
+            {error && <Notice title="Error" text={error} />}
             <ReactPlayer
                 ref={playerRef}
                 className="player-integration"
@@ -93,6 +106,7 @@ const Player = ({ currentSong, currentSongTitle, songs, currentSongIndex, setCur
                 onProgress={progressStatus}
                 progressInterval={500}
                 onEnded={handleSongEnd}
+                onError={handleError}
             />
 
             <section className="player-manipulation">

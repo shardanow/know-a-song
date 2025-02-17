@@ -13,7 +13,8 @@ const FilmList = ({ films, onSelectFilm }) => {
                 const film_id = film.api_tmdb_id ? film.api_tmdb_id : film.api_shiki_id;
 
                 const songs = await getFilmSongs(film_id);
-                counts[film.id] = songs.length;
+                const uniqueSongs = new Set(songs.map(song => song.id));
+                counts[film.id] = uniqueSongs.size;
             }
             setSongCounts(counts);
         };

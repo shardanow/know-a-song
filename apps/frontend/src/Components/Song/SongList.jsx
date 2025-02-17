@@ -167,7 +167,7 @@ const SongList = ({ playItem, currentSong, songs, isPlaying }) => {
                 <div className="modal" onClick={closeModal}>
                     <div className="modal-content" onClick={(e) => e.stopPropagation()}>
                         <span className="close" onClick={closeModal}>&times;</span>
-                        <img src={selectedThumbnail} alt="Episode thumbnail" className="modal-thumbnail" />
+                        <img loading="lazy" src={selectedThumbnail} alt="Episode thumbnail" className="modal-thumbnail" />
                     </div>
                 </div>
             )}

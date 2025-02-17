@@ -36,16 +36,16 @@ const FilmCardItem = ({ film, onSelectFilm, size, songCount }) => {
     let imageSize;
     switch (size) {
         case 'small':
-            imageSize = 'w200';
-            break;
-        case 'normal':
-            imageSize = 'w300';
-            break;
-        case 'big':
             imageSize = 'w500';
             break;
+        case 'normal':
+            imageSize = 'w780';
+            break;
+        case 'big':
+            imageSize = 'w1280';
+            break;
         default:
-            imageSize = 'w200';
+            imageSize = 'w500';
     }
 
     return (
@@ -53,7 +53,7 @@ const FilmCardItem = ({ film, onSelectFilm, size, songCount }) => {
             <div className="song-count">{songCount} songs</div>
             <figcaption>{filmInfo.title || filmInfo.name} ({releaseYear})</figcaption>
             <picture>
-                <img src={`https://image.tmdb.org/t/p/${imageSize}/${filmInfo.poster_path}`} alt={filmInfo.title || filmInfo.name} />
+                <img loading="lazy" src={`https://image.tmdb.org/t/p/${imageSize}/${filmInfo.backdrop_path}`} alt={filmInfo.title || filmInfo.name} />
             </picture>
         </figure>
     );

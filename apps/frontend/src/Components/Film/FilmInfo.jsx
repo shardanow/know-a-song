@@ -14,7 +14,7 @@ const FilmInfo = ({ filmInfo }) => {
                         <b className="film-title-text">{filmTitle}</b> <i className="film-title-year">({filmYear})</i>
                     </figcaption>
                     <picture>
-                        <img src={filmBackground} alt={`${filmTitle} - ${filmYear}`} />
+                        <img loading="lazy" src={filmBackground} alt={`${filmTitle} - ${filmYear}`} />
                     </picture>
                     <a href={filmDBLink} className="film-db-link" target="_blank" rel="noopener noreferrer">
                         <FontAwesomeIcon icon={faLink} />
