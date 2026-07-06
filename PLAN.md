@@ -55,7 +55,7 @@ know-a-song/
 
 ## Phase roadmap
 
-### Phase 0 — Security fixes (2 days) ← Complete ✅
+### Phase 0 — Security fixes ← Complete ✅
 - [x] Backend: bcrypt instead of CryptoJS.AES
 - [x] Backend: `crypto.randomBytes` for tokens
 - [x] Backend: Auth middleware (Authorization: Bearer)
@@ -67,11 +67,11 @@ know-a-song/
 - [x] Frontend: Remove dead code (Genre.jsx, UserSettings.jsx, YouTubePlayer.js)
 - [ ] Screenshot UI for reference before Tailwind migration
 
-### Phase 1 — Monorepo + Tooling (2-3 days)
-- [ ] Create `packages/shared` with Zod schemas
-- [ ] Create `packages/database` with Drizzle schema
-- [ ] TypeScript + ESLint + Prettier on all workspaces
-- [ ] First migration from current schema
+### Phase 1 — Monorepo + Tooling ← Complete ✅
+- [x] Create `packages/shared` with Zod schemas
+- [x] Create `packages/database` with Drizzle schema + relations
+- [x] Root ESLint + Prettier config
+- [x] First migration generated from current schema
 
 ### Phase 2 — Backend rewrite (NestJS + Drizzle) (5-6 days)
 - [ ] Init NestJS in `apps/backend`

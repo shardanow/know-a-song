@@ -33,7 +33,7 @@ npm run start -w apps/frontend
 | Phase | Status | Description |
 |-------|--------|-------------|
 | 0 | **Complete** | Security fixes in legacy code |
-| 1 | **Current** | Monorepo tooling + packages/shared |
+| 1 | **Complete** | Monorepo tooling + packages/shared |
 | 2 | Planned | Backend rewrite (NestJS + Drizzle) |
 | 3 | Planned | Frontend rewrite (Next.js + Tailwind) |
 | 4 | Planned | Integration (auth, search, settings) |
