@@ -1,0 +1,31 @@
+{
+  "name": "know-a-song-back-end",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js",
+    "dev": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://denissined@bitbucket.org/denissined/know-a-song-back-end.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://bitbucket.org/denissined/know-a-song-back-end/issues"
+  },
+  "homepage": "https://bitbucket.org/denissined/know-a-song-back-end#readme",
+  "dependencies": {
+    "crypto-js": "^4.2.0",
+    "dotenv": "^16.4.0",
+    "express": "^4.21.0",
+    "pg-promise": "^11.10.0",
+    "cors": "^2.8.5"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  }
+}
