@@ -39,8 +39,8 @@ No lint or typecheck configured beyond CRA defaults.
 
 ## Data flow
 
-- **App API** (localhost:3000): `src/Services/API/getFilms.js`, `getFilmSongs.js` — hardcoded `http://localhost:3000/api/...`
-- **TMDB API**: `src/Services/API/getTMDBDataMethods.js` — hardcoded bearer token in source
+- **App API** (`REACT_APP_API_URL` from `.env`): `src/Services/API/apiClient.js` — unified client
+- **TMDB API** (`REACT_APP_TMDB_TOKEN` from `.env`): same `apiClient.js`
 - **YouTube**: `react-player` in `src/Components/Song/Player.jsx`
 
 ## Docker
@@ -54,13 +54,8 @@ docker compose up --build -d
 - `docker-compose.yml`: mounts `.:/app` (delegated) + named volume for `node_modules`.
 - `init.sh`: starts compose, waits for `node_modules`, copies from container to host.
 
-## Stale files
-
-- `src/Pages/Genre.jsx` and `src/Pages/UserSettings.jsx` are **empty** — not wired in router.
-- `src/Services/integrations/YouTubePlayer.js` is **dead code** — the app uses `react-player` instead.
-
 ## Key conventions
 
 - Font Awesome 6 via CDN in `public/index.html` (not npm).
 - `React.StrictMode` is **commented out** in `src/index.js`.
-- No `.env` beyond `PORT=8080` — API base URLs and TMDB token are hardcoded in source.
+- `.env` vars: `PORT`, `REACT_APP_API_URL`, `REACT_APP_TMDB_TOKEN`.

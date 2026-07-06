@@ -28,7 +28,7 @@ No test, lint, typecheck, or build steps.
 - **Single Express app** — no monorepo, no build step, plain `require()`.
 - **Entrypoint**: `app.js` — mounts 5 routers under `/api`.
 - **Pattern**: Controllers (`controller/`) call `pg-promise` directly; routes (`routes/`) wire HTTP verbs to controllers.
-- **Auth**: custom token-based (random string, stored in `Users.token`). Passwords encrypted with `CryptoJS.AES`/ECB (not hashed). The seed user `admin` has plaintext password `admin`.
+- **Auth**: token-based (Authorization: Bearer). Passwords hashed with bcrypt.
 
 ## API structure
 
@@ -38,11 +38,11 @@ All routes under `/api`:
 |---|---|---|
 | `/api/film*`, `/api/films` | `FilmRoutes.js` | No |
 | `/api/song*`, `/api/songs` | `SongRoutes.js` | No |
-| `/api/user*`, `/api/users` | `UserRoutes.js` | Token (in body) |
+| `/api/user*`, `/api/users` | `UserRoutes.js` | Bearer token |
 | `/api/user_role*`, `/api/user_roles` | `UserRoleRoutes.js` | No |
 | `/api/authorize`, `/api/activate` | `AuthorizationRoutes.js` | No |
 
-**Gotcha**: `GET /api/user/:id` and `GET /api/user/:username` are identical Express route patterns; whichever is defined first in `UserRoutes.js` handles both.
+Auth middleware (`middleware/auth.js`) extracts Bearer token from `Authorization` header into `req.token`.
 
 ## Database
 
@@ -55,7 +55,7 @@ All routes under `/api`:
 ## Auth flow
 
 1. `POST /api/authorize` with `{username, password}` — returns a `token`.
-2. Pass `token` in request body on protected endpoints.
+2. Pass `Authorization: Bearer <token>` header on protected endpoints.
 3. Rights are checked via `UserType.rights` column (JSON-like string, e.g. `'{"authorization": 1, "edit_users": 0}'`).
 
 ## Docker
@@ -83,8 +83,8 @@ cd apps/backend && docker compose up -d
 | `DB_NAME` | Yes | Database name |
 | `DB_USER` | Yes | DB user |
 | `DB_PASSWORD` | Yes | DB password |
-| `SECRET_KEY_SALT` | Yes | AES encryption salt (`.env` local) |
-| `SECRET_KEY_IV` | Yes | AES encryption IV (`.env` local) |
+| ~~`SECRET_KEY_SALT`~~ | No | Removed in Phase 0 — no longer used |
+| ~~`SECRET_KEY_IV`~~ | No | Removed in Phase 0 — no longer used |
 | `PORT` | No | App port (default 3000) |
 
 ## Key conventions

@@ -55,17 +55,16 @@ know-a-song/
 
 ## Phase roadmap
 
-### Phase 0 — Security fixes (2 days) ← Current
-Fix critical issues in legacy code before rewriting.
-- [ ] Backend: bcrypt instead of CryptoJS.AES
-- [ ] Backend: `crypto.randomBytes` for tokens
-- [ ] Backend: Auth middleware (Authorization: Bearer)
-- [ ] Backend: Fix duplicate route `:id` / `:username`
-- [ ] Backend: password VARCHAR(255), rights JSONB
-- [ ] Backend: Zod validation on createUser/authorize
-- [ ] Frontend: TMDB key + API URL to `.env`
-- [ ] Frontend: Unified apiClient
-- [ ] Frontend: Remove dead code (Genre.jsx, UserSettings.jsx, YouTubePlayer.js)
+### Phase 0 — Security fixes (2 days) ← Complete ✅
+- [x] Backend: bcrypt instead of CryptoJS.AES
+- [x] Backend: `crypto.randomBytes` for tokens
+- [x] Backend: Auth middleware (Authorization: Bearer)
+- [x] Backend: Fix duplicate route `:id` / `:username`
+- [x] Backend: password VARCHAR(255)
+- [x] Backend: Zod validation on createUser/authorize
+- [x] Frontend: TMDB key + API URL to `.env`
+- [x] Frontend: Unified apiClient
+- [x] Frontend: Remove dead code (Genre.jsx, UserSettings.jsx, YouTubePlayer.js)
 - [ ] Screenshot UI for reference before Tailwind migration
 
 ### Phase 1 — Monorepo + Tooling (2-3 days)
