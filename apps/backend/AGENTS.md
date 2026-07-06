@@ -1,8 +1,9 @@
-# AGENTS.md — KnowASong Backend
+# AGENTS.md — KnowASong Backend (apps/backend/)
 
 ## Quick start
 
 ```bash
+cd apps/backend
 cp .env.example .env  # or use existing .env
 docker compose up -d   # starts app (port 3000) + PostgreSQL
 ```
@@ -12,8 +13,12 @@ API runs at `http://localhost:3000/api/...`.
 ## Commands
 
 ```bash
-npm start       # node app.js
-npm run dev     # nodemon app.js (auto-restart on changes)
+# from repo root:
+npm run dev -w apps/backend        # nodemon app.js
+npm run start -w apps/backend      # node app.js
+
+# or from apps/backend/:
+cd apps/backend && npm start
 ```
 
 No test, lint, typecheck, or build steps.
@@ -54,6 +59,11 @@ All routes under `/api`:
 3. Rights are checked via `UserType.rights` column (JSON-like string, e.g. `'{"authorization": 1, "edit_users": 0}'`).
 
 ## Docker
+
+Run from `apps/backend/` dir:
+```bash
+cd apps/backend && docker compose up -d
+```
 
 | Command | What it does |
 |---|---|

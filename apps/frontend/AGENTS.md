@@ -1,9 +1,13 @@
-# AGENTS.md — KnowASong Frontend
+# AGENTS.md — KnowASong Frontend (apps/frontend/)
 
 ## Quick start
 
 ```bash
-npm start       # CRA dev server on port 8080 (http://localhost:8080)
+# from repo root:
+npm run start -w apps/frontend    # CRA dev server on port 8080
+
+# or from apps/frontend/:
+cd apps/frontend && npm start
 ```
 
 Requires the **backend** (`know_a_song_back_end`) running on `http://localhost:3000` — API URLs are hardcoded.
@@ -40,6 +44,11 @@ No lint or typecheck configured beyond CRA defaults.
 - **YouTube**: `react-player` in `src/Components/Song/Player.jsx`
 
 ## Docker
+
+```bash
+cd apps/frontend
+docker compose up --build -d
+```
 
 - `Dockerfile`: `npm install --force`, exposes 8080.
 - `docker-compose.yml`: mounts `.:/app` (delegated) + named volume for `node_modules`.
