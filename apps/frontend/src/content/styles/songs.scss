@@ -1,0 +1,297 @@
+.song-list {
+  padding: 20px;
+  background-color: #252525;
+
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+  .list-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    h2 {
+      margin: 0;
+      padding: 0;
+      display: flex;
+      align-items: center;
+
+      i {
+        margin-right: 8px;
+        font-size: 17px;
+      }
+    }
+
+    .list-counter {
+      display: flex;
+      align-items: center;
+      font-size: 18px;
+      color: #e0e0e0;
+
+      i {
+        margin-right: 8px;
+      }
+    }
+  }
+
+  .song-list-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #e0e0e0;
+  }
+
+  .season-block {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .season-title {
+    font-size: 20px;
+    font-weight: bold;
+    color: #e0e0e0;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+
+    i {
+      margin-right: 8px;
+      font-size: 14px;
+    }
+  }
+
+  .episode-block {
+    margin-bottom: 15px;
+    padding-left: 20px;
+    border-left: 2px solid #ddd;
+  }
+
+  .episode-title {
+    font-size: 18px;
+    font-weight: bold;
+    color: #e0e0e0;
+    margin-bottom: 8px;
+    cursor: pointer;
+    margin-left: -10px;
+    display: flex;
+    align-items: center;
+
+    .title-icon {
+      font-size: 14px;
+    }
+
+    i {
+      margin-right: 10px;
+    }
+
+    .episode-thumbnail {
+      width: 50px;
+      height: auto;
+      margin-right: 10px;
+      border-radius: 4px;
+cursor: pointer;
+      transition: transform 0.3s;
+    }
+
+    .episode-thumbnail:hover {
+      transform: scale(1.1); /* Slightly enlarge the thumbnail on hover */
+          }
+  }
+}
+
+.song-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  background-color: #252525;
+  transition: background-color 0.3s, box-shadow 0.3s;
+
+  &:hover {
+    background-color: #444;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  &.song-item--active {
+    background-color: #444;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+
+    .left-side .play-icon {
+      color: #ff6b6b; /* Active state color */
+    }
+  }
+
+  .left-side {
+    display: flex;
+    align-items: center;
+
+    .play-icon {
+      font-size: 24px;
+      cursor: pointer;
+      margin-right: 10px;
+      color: #e0e0e0;
+      transition: color 0.3s;
+
+      &:hover {
+        color: #ff6b6b; /* Hover color */
+      }
+    }
+
+    .song-title {
+      font-size: 16px;
+      color: #e0e0e0;
+
+      .song-author {
+        font-weight: bold;
+      }
+
+      .song-label {
+        font-size: 14px;
+        font-weight: bold;
+        margin-left: 10px;
+        padding: 2px 5px;
+        border-radius: 4px;
+        background-color: #007bff;
+        color: #fff;
+
+        &--opening {
+          background-color: #28a745; /* Green for opening */
+        }
+
+        &--ending {
+          background-color: #dc3545; /* Red for ending */
+        }
+      }
+
+      .repetition-icon-wrapper {
+        position: relative;
+        display: inline-block;
+        margin-left: 10px;
+
+        .repetition-icon {
+          color: #e0e0e0; /* Yellow color for repetition icon */
+          cursor: pointer;
+          transition: color 0.3s;
+
+          &:hover {
+            color: #ff6b6b; /* Lighter yellow on hover */
+          }
+        }
+
+        .repetition-hint {
+          visibility: hidden;
+          width: 200px;
+          background-color: #333;
+          color: #e0e0e0;
+          text-align: center;
+          border-radius: 6px;
+          padding: 5px;
+          position: absolute;
+          z-index: 1;
+          bottom: 135%;
+          left: 25%;
+          margin-left: -100px;
+          opacity: 0;
+          transition: opacity 0.3s;
+          white-space: pre-line;
+
+          &::after {
+            content: "";
+            position: absolute;
+            top: 100%; /* Arrow at the bottom */
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #333 transparent transparent transparent;
+          }
+        }
+
+        &:hover .repetition-hint {
+          visibility: visible;
+          opacity: 1;
+        }
+      }
+    }
+  }
+
+  .right-side {
+    display: flex;
+    align-items: center;
+    grid-gap: 8px;
+
+    .left-buttons,
+    .right-buttons {
+      display: flex;
+      align-items: center;
+
+      i {
+        font-size: 20px;
+        cursor: pointer;
+        margin-left: 10px;
+        color: #e0e0e0;
+        transition: color 0.3s;
+
+        &:hover {
+          color: #ff6b6b;
+        }
+      }
+    }
+  }
+}
+
+.error {
+  color: red;
+  font-size: 16px;
+  text-align: center;
+  margin-top: 20px;
+}
+
+.modal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+.modal-content {
+  position: relative;
+  background-color: #202020;
+  margin: auto;
+  padding: 15px;
+  width: 80%;
+  max-width: 60vw;
+  border-radius: 8px;
+}
+
+.close {
+  position: absolute;
+  top: 15px;
+  right: 25px;
+  color: #aaa;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.modal-thumbnail {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+}

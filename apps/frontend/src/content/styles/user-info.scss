@@ -1,0 +1,25 @@
+.user-info{
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-columns: 50px 1fr 40px;
+  align-items: center;
+  border-top: 1px solid;
+  margin: 30px;
+  padding-top: 30px;
+  padding-left: 15px;
+  padding-right: 15px;
+
+  .user-image img{
+    border: 2px solid white;
+    border-radius: 100%;
+    min-height: 45px;
+    min-width: 45px;
+  }
+
+  .user-name{
+    font-size: 1.1rem;
+    margin-left: 15px;
+    font-weight: 300;
+  }
+
+}
