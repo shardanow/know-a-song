@@ -5,8 +5,8 @@ require('dotenv').config();
 class UserController {
     createUser = async (request, response) => {
         let {username, password, email} = request.body;
-        // Encrypt Password
-        password = generators.encryptStringData(password);
+        // Hash Password
+        password = await generators.hashPassword(password);
 
         //Generate new token
         const tokenNew = generators.randomTokenKey();
@@ -24,10 +24,7 @@ class UserController {
     }
 
     getUsers = async (request, response) => {
-        let {token} = request.body;
-
-        //Get checking of API method caller have requested rights
-        const rights = this.checkUserRights(token, ['authorization', 'edit_users']);
+        const rights = this.checkUserRights(request.token, ['authorization', 'edit_users']);
 
         //Get Users if API method caller have admin rights
         if ((await rights).token !== 0) {
@@ -84,16 +81,16 @@ class UserController {
     }
 
     updateUser = async (request, response) => {
-        let {username, password, user_type_id, email, token} = request.body;
+        let {username, password, user_type_id, email} = request.body;
         const {id} = request.params;
 
-        // Encrypt Password
-        password = generators.encryptStringData(password);
+        // Hash Password
+        password = await generators.hashPassword(password);
         //Generate Token
         const newToken = generators.randomTokenKey();
 
         //Get checking of API method caller have requested rights
-        const rights = await this.checkUserRights(token, ['authorization', 'edit_users']);
+        const rights = await this.checkUserRights(request.token, ['authorization', 'edit_users']);
 
         //Update User if API method caller have requested rights
         if (rights.token !== 0) {
@@ -101,7 +98,7 @@ class UserController {
                 //Update User with passed id and token (without changing user_type_id)
                 let updateUser = await db.query(
                     'UPDATE Users set username = $3, password = $4, email = $5, token = $6 WHERE id = $1 AND token = $2 RETURNING *'
-                    , [id, token, username, password, email, newToken]);
+                    , [id, request.token, username, password, email, newToken]);
 
                 //Update any user by passed id if requested user have admin rights (with changing user_type_id)
                 if (rights.role.toLowerCase() === 'admin') {
@@ -126,14 +123,14 @@ class UserController {
     }
 
     updateUserType = async (request, response) => {
-        let {user_type_id, token} = request.body;
+        let {user_type_id} = request.body;
         const {id} = request.params;
 
         //Generate Token
         const newToken = generators.randomTokenKey();
 
         //Get checking of API method caller have requested rights
-        const rights = await this.checkUserRights(token, ['authorization', 'add_users', 'edit_users']);
+        const rights = await this.checkUserRights(request.token, ['authorization', 'add_users', 'edit_users']);
 
         //Update Users Type if API method caller have admin rights
         if (rights.token !== 0 && rights.role.toLowerCase() === 'admin') {
@@ -154,11 +151,10 @@ class UserController {
     }
 
     deleteUser = async (request, response) => {
-        let {token} = request.body;
         const {id} = request.params;
 
         //Get checking of API method caller have requested rights
-        const rights = await this.checkUserRights(token, ['authorization', 'edit_users']);
+        const rights = await this.checkUserRights(request.token, ['authorization', 'edit_users']);
 
         //Get Users if API method caller have requested rights
         if (rights.token !== 0) {
@@ -166,7 +162,7 @@ class UserController {
                 //Delete User with passed id and token
                 let deleteUser = await db.query(
                     'DELETE FROM Users WHERE id = $1 AND token = $2 RETURNING *'
-                    , [id, token]);
+                    , [id, request.token]);
 
                 //Delete any user by passed id if requested user have admin rights
                 if (rights.role.toLowerCase() === 'admin') {

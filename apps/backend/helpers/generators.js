@@ -1,34 +1,17 @@
-const CryptoJS = require("crypto-js");
+const bcrypt = require('bcrypt');
+const crypto = require('crypto');
 
 class generators {
     randomTokenKey() {
-        let rand = function () {
-            return Math.random().toString(36).substring(2); // remove `0.`
-        };
-
-        const token = function () {
-            return rand() + rand(); // to make it longer let's double it
-        };
-
-        return token();
+        return crypto.randomBytes(32).toString('hex');
     }
 
-    encryptStringData(string) {
-        return CryptoJS.AES.encrypt(string, process.env.SECRET_KEY_SALT, {
-            keySize: 16,
-            iv: process.env.SECRET_KEY_IV,
-            mode: CryptoJS.mode.ECB,
-            padding: CryptoJS.pad.Pkcs7
-        }).toString();
+    async hashPassword(password) {
+        return bcrypt.hash(password, 12);
     }
 
-    decryptStringData(string) {
-        return CryptoJS.AES.decrypt(string, process.env.SECRET_KEY_SALT, {
-            keySize: 16,
-            iv: process.env.SECRET_KEY_IV,
-            mode: CryptoJS.mode.ECB,
-            padding: CryptoJS.pad.Pkcs7
-        }).toString(CryptoJS.enc.Utf8);
+    async comparePassword(password, hash) {
+        return bcrypt.compare(password, hash);
     }
 }
 

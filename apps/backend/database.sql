@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS Users (
     id SERIAL PRIMARY KEY,
     username VARCHAR(50) UNIQUE NOT NULL,
     email VARCHAR(100) UNIQUE NOT NULL,
-    password VARCHAR(50) NOT NULL,
+    password VARCHAR(255) NOT NULL,
     token VARCHAR(50) UNIQUE NOT NULL,
     last_login TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     user_type_id INT NOT NULL DEFAULT 1,
@@ -96,7 +96,7 @@ INSERT INTO UserType VALUES
 
 -- Insert some sample users
 INSERT INTO Users (id, username, email, password, token, user_type_id, user_is_active) VALUES
-    (1, 'admin', 'somemail@gmail.com', 'admin', ' ', 3, 1);
+    (1, 'admin', 'somemail@gmail.com', '$2b$12$BIPxHhoU7DUh49z6T00.neZa.fPzXvrZKzElXVC7tVgGOTGBUX/aO', ' ', 3, 1);
 
 
 -- Insert some sample films

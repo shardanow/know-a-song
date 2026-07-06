@@ -13,7 +13,7 @@ class AuthorizationController {
             //Authorization logic
             if (getUser.length > 0) {
                 //Compare user hashed pass to sent one
-                if (generators.decryptStringData(getUser[0].password) === password) {
+                if (await generators.comparePassword(password, getUser[0].password)) {
                     //Send 200 response with data and Update User Token
                     return response.status(200).json({
                         message: 'Authorize was success',
