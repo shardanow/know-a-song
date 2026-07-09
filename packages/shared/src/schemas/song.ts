@@ -9,6 +9,7 @@ export const songSchema = z.object({
   isEnding: z.boolean().default(false),
   author: z.string().max(50),
   title: z.string().max(50),
+  startTime: z.number().int().nullable().optional(),
 });
 
 export const episodeSeasonSongSchema = z.object({

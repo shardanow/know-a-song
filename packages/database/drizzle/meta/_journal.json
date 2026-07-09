@@ -8,6 +8,34 @@
       "when": 1783332818747,
       "tag": "0000_fat_the_spike",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1783370087162,
+      "tag": "0001_ambiguous_blob",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1783371211703,
+      "tag": "0002_unique_cyclops",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1783506706169,
+      "tag": "0003_lucky_prodigy",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1783513642135,
+      "tag": "0004_stiff_quicksilver",
+      "breakpoints": true
     }
   ]
 }

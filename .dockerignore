@@ -1,0 +1,10 @@
+node_modules
+.git
+*.md
+.env
+.env.local
+apps/*/node_modules
+apps/*/dist
+apps/*/.next
+apps/frontend-legacy
+apps/backend-legacy

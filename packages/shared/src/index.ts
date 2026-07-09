@@ -2,3 +2,8 @@ export * from './schemas/film';
 export * from './schemas/user';
 export * from './schemas/song';
 export * from './schemas/apiKey';
+export * from './schemas/pagination';
+export * from './schemas/comment';
+export * from './schemas/suggestion';
+export * from './schemas/filmFavorite';
+export * from './schemas/artist';

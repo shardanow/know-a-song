@@ -1,6 +1,7 @@
 import { pgTable, serial, integer, boolean, varchar, foreignKey } from 'drizzle-orm/pg-core';
 import { films } from './films';
 import { users } from './users';
+import { artists } from './artists';
 
 export const songs = pgTable('Songs', {
   id: serial('id').primaryKey(),
@@ -10,10 +11,13 @@ export const songs = pgTable('Songs', {
   isOpening: boolean('is_opening').notNull().default(false),
   isEnding: boolean('is_ending').notNull().default(false),
   author: varchar('author', { length: 50 }).notNull(),
+  artistId: integer('artist_id'),
   title: varchar('title', { length: 50 }).notNull(),
+  startTime: integer('start_time'),
 }, (table) => [
   foreignKey({ columns: [table.filmId], foreignColumns: [films.id] }),
   foreignKey({ columns: [table.ownerId], foreignColumns: [users.id] }),
+  foreignKey({ columns: [table.artistId], foreignColumns: [artists.id] }),
 ]);
 
 export const episodeSeasonSongs = pgTable('EpisodeSeasonSongs', {

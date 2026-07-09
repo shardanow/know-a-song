@@ -65,7 +65,7 @@ know-a-song/
 - [x] Frontend: TMDB key + API URL to `.env`
 - [x] Frontend: Unified apiClient
 - [x] Frontend: Remove dead code (Genre.jsx, UserSettings.jsx, YouTubePlayer.js)
-- [ ] Screenshot UI for reference before Tailwind migration
+- [x] legacy front-end UI for reference before Tailwind migration
 
 ### Phase 1 — Monorepo + Tooling ← Complete ✅
 - [x] Create `packages/shared` with Zod schemas
@@ -73,34 +73,43 @@ know-a-song/
 - [x] Root ESLint + Prettier config
 - [x] First migration generated from current schema
 
-### Phase 2 — Backend rewrite (NestJS + Drizzle) (5-6 days)
-- [ ] Init NestJS in `apps/backend`
-- [ ] Auth module (Passport.js JWT)
-- [ ] Users, Films, Songs, UserRoles modules
-- [ ] Swagger docs on all endpoints
-- [ ] Batch endpoint for songs (fix N+1)
-- [ ] Global error filter + ZodValidationPipe
+### Phase 2 — Backend rewrite (NestJS + Drizzle) ← Complete ✅
+- [x] Init NestJS in `apps/backend`
+- [x] Auth module (Passport.js JWT)
+- [x] Users, Films, Songs, UserRoles modules
+- [x] Swagger docs on all endpoints
+- [x] Batch endpoint for songs (fix N+1)
+- [x] Global error filter + ZodValidationPipe
 
-### Phase 3 — Frontend rewrite (Next.js + Tailwind) (6-7 days)
-- [ ] Init Next.js in `apps/frontend`
-- [ ] openapi-typescript codegen → api-client
-- [ ] shadcn/ui component library
-- [ ] Tailwind migration (compare with screenshots)
-- [ ] React Query for data fetching
-- [ ] Zustand for auth + player state
+### Phase 3 — Frontend rewrite (Next.js + Tailwind) ← Complete ✅
+- [x] Init Next.js (v16 + React 19 + TS + App Router)
+- [x] Tailwind v4 + custom dark theme (matched legacy SCSS)
+- [x] shadcn/ui component library (button, input, card, dialog, dropdown-menu, tabs, sheet, avatar, badge)
+- [x] Layout components (LeftBar, RightBar, Header, Footer, Logo, Nav)
+- [x] Zustand for player + auth state
+- [x] React Query for data fetching
+- [x] Typed API client (api.ts + api-client.ts)
+- [x] SearchBar with search functionality
+- [x] Film list page (/films) with batch song count
+- [x] Film detail page (/film/[type]/[id]) with Player
+- [x] SongList, SongItem, Player components
+- [x] Auth UI (login + register pages)
+- [x] Settings page with sign-out
+- [x] SSR/SEO optimization (metadata, dynamic rendering)
 
-### Phase 4 — Integration (3 days)
-- [ ] Auth UI (login/register)
-- [ ] Search (connect SearchBar)
-- [ ] User settings page
-- [ ] Root docker-compose (postgres + backend)
-- [ ] SSR features (metadata, Image, prefetch)
+### Phase 4 — Integration ← Complete ✅
+- [x] Auth UI (login/register)
+- [x] Search (SearchBar → /films?search=)
+- [x] User settings page
+- [x] SSR features (metadata, dynamic rendering)
+- [x] Root docker-compose (postgres + backend)
+- [x] Refresh token flow (httpOnly cookie + /auth/refresh)
 
-### Phase 5 — Polish (ongoing)
-- [ ] Admin panel (user/role management)
-- [ ] CI/CD (GitHub Actions)
-- [ ] Sentry / monitoring
-- [ ] i18n (next-intl)
+### Phase 5 — Polish ← Complete ✅
+- [x] Admin panel (user/role management)
+- [x] CI/CD (GitHub Actions)
+- [x] Sentry (frontend + backend)
+- [x] i18n (next-intl, en + ru)
 
 ## Key architectural decisions
 

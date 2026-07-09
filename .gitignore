@@ -3,6 +3,7 @@ dist/
 .next/
 build/
 coverage/
+.turbo/
 
 .env
 .env.local
